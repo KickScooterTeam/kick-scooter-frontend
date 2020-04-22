@@ -46,6 +46,27 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+function emailValidation(email) {
+    if (email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+        return true;
+    }
+    return false;
+}
+
+function nameValidation(info) {
+    if (info.match(/^([a-zA-Z ]){2,30}$/)) {
+        return true;
+    }
+    return false;
+}
+
+function passwordValidation(password) {
+    if (password.match(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)) {
+        return true;
+    }
+    return false;
+}
+
 export default function SignUp(props) {
     const classes = useStyles();
 
@@ -66,22 +87,26 @@ export default function SignUp(props) {
     const handleSubmit = e => {
         e.preventDefault();
 
-        const payload = {
-            "firstName": state.firstName,
-            "lastName": state.lastName,
-            "email": state.email,
-            "password": state.password
-        }
+        if (nameValidation(state.firstName) && nameValidation(state.lastName)
+            && emailValidation(state.email) && passwordValidation(state.password)) {
 
-        axios.post(API_BASE_URL + `identity-service/accounts/sign-up`, payload).then((res) => {
-            if (res.status === 200) {
-                console.log(res.data);
-                props.history.push('/greeting');
+            const payload = {
+                "firstName": state.firstName,
+                "lastName": state.lastName,
+                "email": state.email,
+                "password": state.password
             }
 
-        }).catch((error) => {
-            alert(error.response.data.error)
-        })
+            axios.post(API_BASE_URL + `identity-service/accounts/sign-up`, payload).then((res) => {
+                if (res.status === 200) {
+                    console.log(res.data);
+                    props.history.push('/greeting');
+                }
+
+            }).catch((error) => {
+                console.log(error.response.data.error);
+            })
+        } else alert("wrong input");
     }
 
     return (
@@ -106,6 +131,7 @@ export default function SignUp(props) {
                                 autoFocus
                                 value={state.firstName}
                                 onChange={handleChange}
+                                error={(state.firstName.length > 0) && !nameValidation(state.firstName)}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -119,6 +145,7 @@ export default function SignUp(props) {
                                 autoComplete="lname"
                                 value={state.lastName}
                                 onChange={handleChange}
+                                error={(state.lastName.length > 0) && !nameValidation(state.lastName)}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -132,6 +159,7 @@ export default function SignUp(props) {
                                 autoComplete="email"
                                 value={state.email}
                                 onChange={handleChange}
+                                error={(state.email.length > 0) && !emailValidation(state.email)}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -146,6 +174,9 @@ export default function SignUp(props) {
                                 autoComplete="current-password"
                                 value={state.password}
                                 onChange={handleChange}
+                                helperText={passwordValidation(state.password)
+                                    ? "" : "Minimum eight characters, at least one letter and one number"}
+                                error={(state.password.length > 0) && !passwordValidation(state.password)}
                             />
                         </Grid>
                     </Grid>
