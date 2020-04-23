@@ -24,6 +24,9 @@ import HelpOutlineRoundedIcon from '@material-ui/icons/HelpOutlineRounded';
 import logo from '../icons/logo.svg';
 // import Payment from "./Payment";
 import Backdrop from "@material-ui/core/Backdrop";
+import Button from "@material-ui/core/Button";
+import setAuthorizationToken from "../utils/setAuthorizationToken";
+import {useHistory} from "react-router";
 
 
 const drawerWidth = 240;
@@ -93,9 +96,10 @@ const useStyles = makeStyles((theme) => ({
         flex: 1,
         justifyContent: 'center'
     },
+
 }));
 
-export default function ToolBar() {
+export default function ToolBar(props) {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -116,6 +120,16 @@ export default function ToolBar() {
     const handleToggle = () => {
         setOpen1(!open1);
     };
+
+    const history = useHistory();
+
+    const clickLogout = (e) => {
+        e.preventDefault();
+        localStorage.removeItem('jwtToken');
+        setAuthorizationToken(false);
+        history.push('/sign-in');
+    }
+
     return (
         <div className={classes.root}>
             <CssBaseline/>
@@ -135,9 +149,10 @@ export default function ToolBar() {
                     >
                         <MenuIcon/>
                     </IconButton>
-                    <Typography variant="h6" noWrap>
+                    <Typography variant="h6" style={{flex: 1}}>
                         WINDY
                     </Typography>
+                    <Button color='inherit' onClick={clickLogout}>Logout</Button>
                 </Toolbar>
             </AppBar>
             <Drawer

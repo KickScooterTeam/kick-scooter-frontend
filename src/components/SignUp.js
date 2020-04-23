@@ -97,12 +97,11 @@ export default function SignUp(props) {
                 "password": state.password
             }
 
-            axios.post(API_BASE_URL + `identity-service/accounts/sign-up`, payload).then((res) => {
+            axios.post(API_BASE_URL + `accounts/sign-up`, payload).then((res) => {
                 if (res.status === 200) {
                     console.log(res.data);
                     props.history.push('/greeting');
                 }
-
             }).catch((error) => {
                 console.log(error.response.data.error);
             })

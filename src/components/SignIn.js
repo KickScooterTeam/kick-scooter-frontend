@@ -13,6 +13,7 @@ import Container from '@material-ui/core/Container';
 import logo from "../icons/logo.svg";
 import axios from "axios";
 import {API_BASE_URL} from "../constants/apiConstants";
+import setAuthorizationToken from "../utils/setAuthorizationToken";
 
 function Copyright() {
     return (
@@ -64,26 +65,32 @@ export default function SignIn(props) {
 
     const handleSubmit = e => {
         e.preventDefault();
-
-        const payload = {
-            "email": state.email,
-            "password": state.password
-        }
-
-        axios.post(API_BASE_URL + `identity-service/accounts/sign-in`, payload).then((res) => {
-            if (res.status === 200) {
-                console.log(res.data);
-                props.history.push('/navigation');
-                //save token(sent in header:authorization)
+        if (state.email && state.password) {
+            const payload = {
+                "email": state.email,
+                "password": state.password
             }
-        }).catch((error) => {
-            alert(error.response.data.error)
-        })
+
+            axios.post(API_BASE_URL + `accounts/sign-in`, payload).then((res) => {
+                if (res.status === 200) {
+                    const token = res.headers.authorization;
+                    if (token !== undefined) {
+                        localStorage.setItem('jwtToken', token);
+                        setAuthorizationToken(token);
+                        props.history.push('/');
+                    } else {
+                        alert(res.data.error)
+                    }
+                }
+            }).catch((error) => {
+                alert(error)
+            })
+        }
     }
 
     return (
         <Container component="main" maxWidth="xs">
-            <CssBaseline />
+            <CssBaseline/>
             <div className={classes.paper}>
                 <img src={logo} alt={logo} height={45} width={45}/>
                 <Typography variant="h5">
@@ -116,10 +123,6 @@ export default function SignIn(props) {
                         value={state.password}
                         onChange={handleChange}
                     />
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
-                    />
                     <Button
                         type="submit"
                         fullWidth
@@ -130,7 +133,7 @@ export default function SignIn(props) {
                     >
                         Sign In
                     </Button>
-                    <Grid container>
+                    <Grid container alignContent='center'>
                         <Grid item xs>
                             <Link href="#" variant="body2">
                                 Forgot password?
@@ -145,7 +148,7 @@ export default function SignIn(props) {
                 </form>
             </div>
             <Box mt={8}>
-                <Copyright />
+                <Copyright/>
             </Box>
         </Container>
     );

@@ -8,20 +8,24 @@ import MapComponent from "./components/MapComponent";
 import TripButton from "./components/TripButton";
 import AccountActivation from "./components/AccountActivation";
 import WrongPath from "./components/WrongPath";
+import setAuthorizationToken from "./utils/setAuthorizationToken";
+import AuthenticatedRoute from "./components/AuthenticatedRoute";
+
+setAuthorizationToken(localStorage.jwtToken);
 
 function App() {
     return (
         <Router>
             <Switch>
-                <Route exact path={['/', '/sign-in']} component={SignIn}/>
-                <Route path="/sign-up" component={SignUp}/>
-                <Route path="/greeting" component={Greeting}/>
-                <Route path="/activation" component={AccountActivation}/>
-                <Route path="/navigation">
+                <AuthenticatedRoute exact path="/">
                     <ToolBar/>
                     <MapComponent/>
                     <TripButton/>
-                </Route>
+                </AuthenticatedRoute>
+                <Route path="/sign-in" component={SignIn}/>
+                <Route path="/sign-up" component={SignUp}/>
+                <Route path="/greeting" component={Greeting}/>
+                <Route path="/activation" component={AccountActivation}/>
                 <Route component={WrongPath}/>
             </Switch>
         </Router>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
@@ -25,17 +25,26 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Greeting() {
+export default function Greeting(props) {
     const classes = useStyles();
 
+    useEffect(() => {
+        setTimeout(()=>{
+            props.history.push('/sign-in')
+        },5000)
+    })
+
     return (
-            <Container maxWidth="md" className={classes.paper}>
-                <Grid>
-                    <Typography variant="h3">
-                        Registration is successful, please check your email
-                        to complete registration
-                    </Typography>
-                </Grid>
-            </Container>
+        <Container maxWidth="md" className={classes.paper}>
+            <Grid>
+                <Typography variant="h3">
+                    Registration is successful, please check your email
+                    to complete registration
+                </Typography>
+                <Typography variant="h5">
+                    You will be redirected to the login page in 5 seconds
+                </Typography>
+            </Grid>
+        </Container>
     );
 }
