@@ -1,5 +1,5 @@
 import Typography from "@material-ui/core/Typography";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Slide from "@material-ui/core/Slide";
 import Dialog from "@material-ui/core/Dialog";
 import {makeStyles} from '@material-ui/core/styles';
@@ -13,6 +13,9 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import ListItemIcon from "@material-ui/core/ListItemIcon/ListItemIcon";
 import PersonOutlineRoundedIcon from '@material-ui/icons/PersonOutlineRounded';
+import tokenDecoder from "../utils/tokenDecoder";
+import axios from "axios";
+import {API_BASE_URL} from "../constants/apiConstants";
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -31,6 +34,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function Account(props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [user, setUser] = useState({
+        firstName: '',
+        lastName: '',
+        email: ''
+    });
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -39,6 +47,28 @@ export default function Account(props) {
     const handleClose = () => {
         setOpen(false);
     };
+
+    useEffect(() => {
+        getUserInfo()
+    }, [])
+
+    const getUserInfo = () => {
+        const token = tokenDecoder();
+
+        axios.get(API_BASE_URL + `accounts/` + token)
+            .then((res) => {
+                if (res.status === 200) {
+                    setUser({
+                        firstName: res.data.firstName,
+                        lastName: res.data.lastName,
+                        email: res.data.email
+                    })
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
 
     return (
         <div>
@@ -59,11 +89,11 @@ export default function Account(props) {
                 </AppBar>
                 <List>
                     <ListItem button>
-                        <ListItemText primary="First Name" secondary="user first name"/>
+                        <ListItemText primary={user.firstName + ' ' + user.lastName}/>
                     </ListItem>
                     <Divider/>
                     <ListItem button>
-                        <ListItemText primary="Last Name" secondary="user last name"/>
+                        <ListItemText primary={user.email}/>
                     </ListItem>
                 </List>
             </Dialog>
