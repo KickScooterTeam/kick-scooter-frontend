@@ -1,19 +1,20 @@
 import Typography from "@material-ui/core/Typography";
-import React from "react";
+import React, {useState, useEffect} from "react";
 import Slide from "@material-ui/core/Slide";
 import Dialog from "@material-ui/core/Dialog";
 import {makeStyles} from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItem from '@material-ui/core/ListItem';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import ListItemIcon from "@material-ui/core/ListItemIcon/ListItemIcon";
 import HistoryIcon from '@material-ui/icons/History';
+import {Paper, Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
+import getIdFromToken from '../utils/tokenDecoder';
+import axios from 'axios';
+
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -32,6 +33,15 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function TripHistory(props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [trips, setTrips] = useState([]);
+    // const [payment, setPayment] = useState([]);
+
+    useEffect(() => {
+        console.log(getIdFromToken);
+        axios.get('http://localhost:8080/trip-service/trips/'+ {getIdFromToken} + '/history')
+            .then(response=>
+            {setTrips( response.data);})
+    });
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -58,15 +68,31 @@ export default function TripHistory(props) {
                         </Typography>
                     </Toolbar>
                 </AppBar>
-                <List>
-                    <ListItem button>
-                        <ListItemText primary="Trip History" secondary="user first name"/>
-                    </ListItem>
-                    <Divider/>
-                    <ListItem button>
-                        <ListItemText primary="Last Name" secondary="user last name"/>
-                    </ListItem>
-                </List>
+                <Paper style={{ backgroundColor: '#cfe8fc', width:500}}>
+                    <Table size="small">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell >Date</TableCell>
+                                <TableCell>TripTime</TableCell>
+                                <TableCell>Distance</TableCell>
+                                <TableCell>Price</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {trips.map((trip) => (
+                                <TableRow key={trip.tripId}>
+                                    <TableCell>{trip.tripStarts}</TableCell>
+                                    <TableCell>{trip.tripTime}</TableCell>
+                                    <TableCell>{trip.distance}</TableCell>
+                                    {/*{axios.get('http://localhost:8080/payment-service/payment/history/'+trip.tripId)*/}
+                                    {/*    .then(response=>{setPayment(response.data);})}*/}
+                                    {/*<TableCell>{payment.amount}</TableCell>*/}
+
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </Paper>
             </Dialog>
         </div>
     );
