@@ -25,7 +25,7 @@ function App() {
                 <Route path="/sign-in" component={SignIn}/>
                 <Route path="/sign-up" component={SignUp}/>
                 <Route path="/greeting" component={Greeting}/>
-                <Route path="/activation" component={AccountActivation}/>
+                <Route path="/activation/:token" component={AccountActivation}/>
                 <Route component={WrongPath}/>
             </Switch>
         </Router>
