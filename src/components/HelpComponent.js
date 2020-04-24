@@ -13,7 +13,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import ListItemIcon from "@material-ui/core/ListItemIcon/ListItemIcon";
-import PersonOutlineRoundedIcon from '@material-ui/icons/PersonOutlineRounded';
+import HelpOutlineRoundedIcon from '@material-ui/icons/HelpOutlineRounded';
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -29,7 +29,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function Account(props) {
+export default function HelpComponent(props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
@@ -44,8 +44,8 @@ export default function Account(props) {
     return (
         <div>
             <ListItem button onClick={handleClickOpen}>
-                <ListItemIcon> <PersonOutlineRoundedIcon/></ListItemIcon>
-                <ListItemText primary='Account'/>
+                <ListItemIcon> <HelpOutlineRoundedIcon/></ListItemIcon>
+                <ListItemText primary='Help'/>
             </ListItem>
             <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
                 <AppBar className={classes.appBar}>
@@ -54,17 +54,13 @@ export default function Account(props) {
                             <CloseIcon/>
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>
-                            Account
+                            Help
                         </Typography>
                     </Toolbar>
                 </AppBar>
                 <List>
                     <ListItem button>
-                        <ListItemText primary="First Name" secondary="user first name"/>
-                    </ListItem>
-                    <Divider/>
-                    <ListItem button>
-                        <ListItemText primary="Last Name" secondary="user last name"/>
+                        <ListItemText primary="Help Info" secondary="user first name"/>
                     </ListItem>
                 </List>
             </Dialog>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import {makeStyles, useTheme} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -13,20 +13,15 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import HistoryIcon from '@material-ui/icons/History';
-
-import PersonOutlineRoundedIcon from '@material-ui/icons/PersonOutlineRounded';
-import PaymentRoundedIcon from '@material-ui/icons/PaymentRounded';
-import HelpOutlineRoundedIcon from '@material-ui/icons/HelpOutlineRounded';
 
 import logo from '../icons/logo.svg';
-// import Payment from "./Payment";
-import Backdrop from "@material-ui/core/Backdrop";
 import Button from "@material-ui/core/Button";
 import setAuthorizationToken from "../utils/setAuthorizationToken";
 import {useHistory} from "react-router";
+import Account from "./Account";
+import HelpComponent from "./HelpComponent";
+import TripHistory from "./TripHistory";
+import Payment from "./Payment";
 
 
 const drawerWidth = 240;
@@ -103,22 +98,13 @@ export default function ToolBar(props) {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
-    const [payment, setPayment] = useState('payment');
+
     const handleDrawerOpen = () => {
         setOpen(true);
     };
 
     const handleDrawerClose = () => {
         setOpen(false);
-    };
-
-    const [open1, setOpen1] = React.useState(false);
-
-    const handleClose = () => {
-        setOpen1(false);
-    };
-    const handleToggle = () => {
-        setOpen1(!open1);
     };
 
     const history = useHistory();
@@ -169,33 +155,15 @@ export default function ToolBar(props) {
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
                     </IconButton>
-
                 </div>
                 <Divider/>
                 <List>
-                    <ListItem button>
-                        <ListItemIcon> <PersonOutlineRoundedIcon/></ListItemIcon>
-                        <ListItemText primary='Account'/>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon> <HistoryIcon/></ListItemIcon>
-                        <ListItemText primary='History'/>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon> <HelpOutlineRoundedIcon/></ListItemIcon>
-                        <ListItemText primary='Help'/>
-                    </ListItem>
-                    <ListItem button onClick={handleToggle}>
-                        <ListItemIcon> <PaymentRoundedIcon/></ListItemIcon>
-                        <ListItemText primary='Payment'/>
-                    </ListItem>
-                    {/*<Backdrop className={classes.backdrop} open={open1} onClick={handleClose}>*/}
-                    {/*    <Payment/>*/}
-                    {/*</Backdrop>*/}
+                    <ListItem component={Account}/>
+                    <ListItem component={TripHistory}/>
+                    <ListItem component={HelpComponent}/>
+                    <ListItem component={Payment}/>
                 </List>
             </Drawer>
         </div>
     );
-
-
 }
