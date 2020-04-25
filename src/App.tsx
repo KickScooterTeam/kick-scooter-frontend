@@ -1,6 +1,6 @@
 import React from 'react';
 import SignUp from "./components/SignUp";
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import SignIn from "./components/SignIn";
 import Greeting from "./components/Greeting";
 import ToolBar from "./components/ToolBar";
