@@ -69,7 +69,7 @@ export default function SignIn(props) {
                 "password": state.password
             }
 
-            axios.post(API_BASE_URL + `accounts/sign-in`, payload).then((res) => {
+            axios.post(API_BASE_URL + `identity-service/accounts/sign-in`, payload).then((res) => {
                 if (res.status === 200) {
                     const token = res.headers.authorization;
                     if (token !== undefined) {

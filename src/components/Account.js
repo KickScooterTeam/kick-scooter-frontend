@@ -55,7 +55,7 @@ export default function Account(props) {
     const getUserInfo = () => {
         const token = tokenDecoder();
 
-        axios.get(API_BASE_URL + `accounts/` + token)
+        axios.get(API_BASE_URL + `identity-service/accounts/` + token)
             .then((res) => {
                 if (res.status === 200) {
                     setUser({

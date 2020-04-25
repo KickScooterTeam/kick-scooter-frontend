@@ -14,6 +14,7 @@ import HistoryIcon from '@material-ui/icons/History';
 import {Paper, Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/core";
 import getIdFromToken from '../utils/tokenDecoder';
 import axios from 'axios';
+import {API_BASE_URL} from "../constants/apiConstants";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -34,13 +35,18 @@ export default function TripHistory(props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [trips, setTrips] = useState([]);
-    // const [payment, setPayment] = useState([]);
+
 
     useEffect(() => {
-        console.log(getIdFromToken);
-        axios.get('http://localhost:8080/trip-service/trips/'+ {getIdFromToken} + '/history')
-            .then(response=>
-            {setTrips( response.data);})
+        const id = getIdFromToken();
+
+        axios.get(API_BASE_URL + "trip-service/trips/" + id + '/history')
+            .then(response => {
+                setTrips(response.data);
+            })
+            .catch((error) =>
+                console.log(error)
+            )
     });
 
     const handleClickOpen = () => {
@@ -68,11 +74,11 @@ export default function TripHistory(props) {
                         </Typography>
                     </Toolbar>
                 </AppBar>
-                <Paper style={{ backgroundColor: '#cfe8fc', width:500}}>
+                <Paper style={{backgroundColor: '#cfe8fc', width: 500}}>
                     <Table size="small">
                         <TableHead>
                             <TableRow>
-                                <TableCell >Date</TableCell>
+                                <TableCell>Date</TableCell>
                                 <TableCell>TripTime</TableCell>
                                 <TableCell>Distance</TableCell>
                                 <TableCell>Price</TableCell>
