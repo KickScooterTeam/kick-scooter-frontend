@@ -15,6 +15,7 @@ import {Paper, Table, TableBody, TableCell, TableHead, TableRow} from "@material
 import getIdFromToken from '../utils/tokenDecoder';
 import axios from 'axios';
 import {API_BASE_URL} from "../constants/apiConstants";
+import moment from 'moment';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -81,14 +82,14 @@ export default function TripHistory(props) {
                                 <TableCell>Date</TableCell>
                                 <TableCell>TripTime</TableCell>
                                 <TableCell>Distance</TableCell>
-                                <TableCell>Price</TableCell>
+                                {/*<TableCell>Price</TableCell>*/}
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {trips.map((trip) => (
                                 <TableRow key={trip.tripId}>
-                                    <TableCell>{trip.tripStarts}</TableCell>
-                                    <TableCell>{trip.tripTime}</TableCell>
+                                    <TableCell>{new Date(trip.tripStarts).toLocaleString()}</TableCell>
+                                    <TableCell>{moment.duration(trip.tripTime).humanize()}</TableCell>
                                     <TableCell>{trip.distance}</TableCell>
                                     {/*{axios.get('http://localhost:8080/payment-service/payment/history/'+trip.tripId)*/}
                                     {/*    .then(response=>{setPayment(response.data);})}*/}

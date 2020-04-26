@@ -13,15 +13,16 @@
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.6",
     "axios": "^0.19.2",
+    "jwt-decode": "latest",
     "leaflet": "^1.6.0",
+    "moment": "^2.24.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-leaflet": "^2.6.3",
+    "react-router": "latest",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
-    "typescript": "^3.7.5",
-    "jwt-decode": "latest",
-    "react-router": "latest"
+    "typescript": "^3.7.5"
   },
   "scripts": {
     "start": "react-scripts start",
